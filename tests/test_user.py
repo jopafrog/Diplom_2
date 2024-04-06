@@ -31,20 +31,6 @@ class TestUser:
         assert response.status_code == 403 and response.json()['success'] is False, \
             f'status code = {response.status_code} and success = {response.json()['success']}'
 
-    # Этот тест нужно удалить
-    def test_delete_user(self):
-        email = data.TEST_USER_EMAIL
-        password = data.TEST_USER_PASS
-        name = data.TEST_USER_NAME
-
-        response = ApiUser.registration_user(email=email, password=password, name=name)
-        print(response.json())
-        token = response.json()['accessToken']
-
-        response = ApiUser.delete_user(token)
-
-        assert response.status_code == 202 and response.json()['success'] is True
-
     def test_login_user_success(self, random_user):
         ApiUser.registration_user(random_user['email'], random_user['password'], random_user['name'])
         response = ApiUser.login_user(random_user['email'], random_user['password'])
