@@ -1,5 +1,4 @@
 import pytest
-import data
 from api.api_user import ApiUser
 
 
@@ -23,5 +22,3 @@ def get_random_user_token():
     yield token
 
     ApiUser.delete_user(token)
-
-
