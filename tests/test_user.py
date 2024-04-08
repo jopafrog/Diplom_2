@@ -1,15 +1,18 @@
+import allure
 import data
 import pytest
 from api.api_user import ApiUser
 
 
 class TestUser:
+    @allure.title('Проверка регистрации пользователя')
     def test_registration_user_success(self, random_user):
         response = ApiUser.registration_user(random_user['email'], random_user['password'], random_user['name'])
 
         assert response.status_code == 200 and response.json()['success'] is True, \
             f'status code = {response.status_code} and success = {response.json()['success']}'
 
+    @allure.title('Проверка регистрации, уже зарегистрированного пользователя')
     def test_registration_two_user_error_creation(self, random_user):
         ApiUser.registration_user(random_user['email'], random_user['password'], random_user['name'])
         response = ApiUser.registration_user(random_user['email'], random_user['password'], random_user['name'])
@@ -17,6 +20,7 @@ class TestUser:
         assert response.status_code == 403 and response.json()['success'] is False, \
             f'status code = {response.status_code} and success = {response.json()['success']}'
 
+    @allure.title('Проверка регистрации, одно из полей не заполнено')
     @pytest.mark.parametrize(
         'email, password, name',
         [
@@ -31,6 +35,7 @@ class TestUser:
         assert response.status_code == 403 and response.json()['success'] is False, \
             f'status code = {response.status_code} and success = {response.json()['success']}'
 
+    @allure.title('Проверка входа пользователя')
     def test_login_user_success(self, random_user):
         ApiUser.registration_user(random_user['email'], random_user['password'], random_user['name'])
         response = ApiUser.login_user(random_user['email'], random_user['password'])
@@ -38,6 +43,7 @@ class TestUser:
         assert response.status_code == 200 and response.json()['success'] is True, \
             f'status code = {response.status_code} and success = {response.json()['success']}'
 
+    @allure.title('Проверка входа с не правильными параметрами (Не правильный параметр: {param})')
     @pytest.mark.parametrize('param', ['bed_email', 'bed_pass'])
     def test_login_bed_parameters_error_login(self, random_user, param):
         ApiUser.registration_user(random_user['email'], random_user['password'], random_user['name'])
@@ -51,6 +57,7 @@ class TestUser:
         assert response.status_code == 401 and response.json()['success'] is False, \
             f'status code = {response.status_code} and success = {response.json()['success']}'
 
+    @allure.title('Проверка изменения данных пользователя, с авторизацией (Изменяемый параметр: {param})')
     @pytest.mark.parametrize('param', ['new_email', 'new_password', 'all_modify'])
     def test_modify_authorization_user_success(self, random_user, param):
         response = ApiUser.registration_user(random_user['email'], random_user['password'], random_user['name'])
@@ -69,6 +76,7 @@ class TestUser:
         assert response.status_code == 200 and response.json()['success'] is True, \
             f'status code = {response.status_code} and success = {response.json()['success']}'
 
+    @allure.title('Проверка изменения данных пользователя, БЕЗ авторизации (Изменяемый параметр: {param})')
     @pytest.mark.parametrize('param', ['new_email', 'new_password', 'all_modify'])
     def test_modify_not_authorization_user_error_modify(self, random_user, param):
         ApiUser.registration_user(random_user['email'], random_user['password'], random_user['name'])

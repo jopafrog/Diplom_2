@@ -1,11 +1,13 @@
 import string
 from random import choice
+import allure
 import requests
 import request_address
 
 
 class ApiUser:
     @staticmethod
+    @allure.step('Создать случайные данные пользователя')
     def create_random_user():
         def generate_random_string(length):
             letters = string.ascii_lowercase
@@ -21,6 +23,7 @@ class ApiUser:
         return payload
 
     @staticmethod
+    @allure.step('Регистрация пользователя')
     def registration_user(email: str, password: str, name: str):
         payload = {
             "email": email,
@@ -32,6 +35,7 @@ class ApiUser:
         return response
 
     @staticmethod
+    @allure.step('Вход пользователя в систему')
     def login_user(email: str, password: str):
         payload = {
             "email": email,
@@ -42,6 +46,7 @@ class ApiUser:
         return response
 
     @staticmethod
+    @allure.step('Удаление пользователя')
     def delete_user(token: str):
         headers = {"Authorization": token}
 
@@ -49,6 +54,7 @@ class ApiUser:
         return response
 
     @staticmethod
+    @allure.step('Изменение данных пользователя')
     def modify_user(email: str, password: str, token: str):
         payload = {
             "email": email,
