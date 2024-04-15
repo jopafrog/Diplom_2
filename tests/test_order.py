@@ -10,8 +10,6 @@ class TestOrder:
         ingredients = ApiOrder.get_random_ingredients()
         response = ApiOrder.create_order(ingredients)
 
-        print(ingredients)
-
         assert response.status_code == 200 and response.json()['success'] is True, \
             f'status code = {response.status_code} and success = {response.json()['success']}'
 
@@ -19,7 +17,7 @@ class TestOrder:
     @pytest.mark.parametrize(
         'ingredients',
         [
-            ['sdofns', 'slkfgkmse'],
+            ['bed_hash1', 'bed_hash2'],
             ['', '  ']
         ]
     )
@@ -57,7 +55,7 @@ class TestOrder:
 
     @allure.title('Проверка получения списка заказов, БЕЗ авторизации')
     def test_get_order_unauthorized_error_response(self):
-        token = 'olerkgnmskg'
+        token = 'incorrect_token'
 
         response = ApiOrder.get_orders_owner(token)
         assert response.status_code == 401 and response.json()['success'] is False, \
